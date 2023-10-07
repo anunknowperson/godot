@@ -110,7 +110,21 @@ void PSDLayer::_bind_methods() {
 
 
 	ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "psd", PROPERTY_HINT_RESOURCE_TYPE, "PSDTexture"), "set_psd_texture", "get_psd_texture");
-	ADD_PROPERTY(PropertyInfo(Variant::STRING, "layer"), "set_layer", "get_layer");
+	ADD_PROPERTY(PropertyInfo(Variant::STRING, "layer", PROPERTY_HINT_ENUM_SUGGESTION), "set_layer", "get_layer");
+}
+
+void PSDLayer::_validate_property(PropertyInfo &p_property) const {
+	if (p_property.name == "layer") {
+		if (!psd.is_valid())
+			return;
+
+		String hint_string;
+		const auto& layers = psd->get_layer_names();
+		for (int i = 0; i < layers.size(); ++i)
+			hint_string += static_cast<String>(layers.get(i)) + ",";
+
+		p_property.hint_string = hint_string;
+	}
 }
 
 void PSDLayer::draw(RID p_canvas_item, const Point2& p_pos, const Color& p_modulate, bool p_transpose) const {

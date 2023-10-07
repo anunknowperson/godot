@@ -44,6 +44,7 @@ protected:
 	String layer = "";
 
 	static void _bind_methods();
+	void _validate_property(PropertyInfo &p_property) const;
 
 public:
 	virtual int get_width() const override;
