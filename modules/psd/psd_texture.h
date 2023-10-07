@@ -95,7 +95,7 @@ protected:
 
 	void parse();
 
-	void ExportLayer(const wchar_t* p_name, unsigned int p_width, unsigned int p_height, const uint8_t* p_data, int p_channel_type);
+	void ExportLayer(String p_name, unsigned int p_width, unsigned int p_height, const uint8_t* p_data, int p_channel_type);
 
 	void clear_data();
 

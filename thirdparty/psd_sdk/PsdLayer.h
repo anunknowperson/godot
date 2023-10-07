@@ -22,7 +22,7 @@ struct Layer
 {
 	Layer* parent;						///< The layer's parent layer, if any.
 	util::FixedSizeString name;			///< The ASCII name of the layer. Truncated to 31 characters in PSD files.
-	uint16_t* utf16Name;				///< The UTF16 name of the layer.
+	char16_t* utf16Name;				///< The UTF16 name of the layer.
 
 	int32_t top;						///< Top coordinate of the rectangle that encloses the layer.
 	int32_t left;						///< Left coordinate of the rectangle that encloses the layer.

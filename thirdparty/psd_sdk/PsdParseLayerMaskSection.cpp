@@ -714,7 +714,7 @@ namespace
 						// PSD Unicode strings store 4 bytes for the number of characters, NOT bytes, followed by
 						// 2-byte UTF16 Unicode data without the terminating null.
 						const uint32_t characterCountWithoutNull = fileUtil::ReadFromFileBE<uint32_t>(reader);
-						layer->utf16Name = memoryUtil::AllocateArray<uint16_t>(allocator, characterCountWithoutNull + 1u);
+						layer->utf16Name = memoryUtil::AllocateArray<char16_t>(allocator, characterCountWithoutNull + 1u);
 
 						for (uint32_t c = 0u; c < characterCountWithoutNull; ++c)
 						{

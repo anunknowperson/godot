@@ -143,6 +143,7 @@ void PSDTexture::parse() {
 	const std::wstring rawFile = L"";
 	Ref<StreamPeerBuffer> file;
 	file.instantiate();
+	file->set_big_endian(true);
 	file->set_data_array(data);
 	MallocAllocator allocator;
 
@@ -289,17 +290,15 @@ void PSDTexture::parse() {
 			// get the layer name.
 			// Unicode data is preferred because it is not truncated by Photoshop, but unfortunately it is optional.
 			// fall back to the ASCII name in case no Unicode name was found.
-			std::wstringstream ssLayerName;
+			String layerName;
 			if (layer->utf16Name)
 			{
-				ssLayerName << reinterpret_cast<wchar_t*>(layer->utf16Name);
+				layerName.parse_utf16(layer->utf16Name);
 			}
 			else
 			{
-				ssLayerName << layer->name.c_str();
+				layerName = layer->name.c_str();
 			}
-			std::wstring wslayerName = ssLayerName.str();
-			const wchar_t* layerName = wslayerName.c_str();
 
 			// at this point, image8, image16 or image32 store either a 8-bit, 16-bit, or 32-bit image, respectively.
 			// the image data is stored in interleaved RGB or RGBA, and has the size "document->width*document->height".
@@ -338,7 +337,7 @@ void PSDTexture::set_data(const Vector<uint8_t> &p_data) {
 
 }
 
-void PSDTexture::ExportLayer(const wchar_t* p_name, unsigned int p_width, unsigned int p_height, const uint8_t* p_data, int p_channel_type)
+void PSDTexture::ExportLayer(String p_name, unsigned int p_width, unsigned int p_height, const uint8_t* p_data, int p_channel_type)
 {
 	if (p_channel_type == -1) {
 		layers[String(p_name)] = Ref<Texture>();
@@ -372,8 +371,7 @@ void PSDTexture::ExportLayer(const wchar_t* p_name, unsigned int p_width, unsign
 
 	Ref<Texture> texture_layer = ImageTexture::create_from_image(image_layer);
 
-	layers[String(p_name)] = texture_layer;
-
+	layers[p_name] = texture_layer;
 }
 
 Array PSDTexture::get_layer_names() const {
